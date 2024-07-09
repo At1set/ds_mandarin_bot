@@ -1,0 +1,15 @@
+{
+  "name": "ds_mandarin_bot_web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "start npm run startFrontend & start npm run startBackend & start npm run startBot",
+    "startFrontend": "npm --prefix client start",
+    "startBackend": "npm --prefix server start",
+    "startBot": "D: && cd \"d:\\рабочий стол\\Проекты ''Гениального'' верстальщика\\ds_mandarin_bot\\\" && .\\src\\venv\\Scripts\\python.exe \".\\src\\main.py\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

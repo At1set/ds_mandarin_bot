@@ -1,0 +1,129 @@
+.ChangingDetected._active {
+  opacity: 1;
+  visibility: visible;
+  animation: show2 0.2s ease-in 0s;
+}
+
+.ChangingDetected._successfully {
+  background-color: rgb(61, 147, 62);
+}
+
+.ChangingDetected._error {
+  background-color: rgb(255, 0, 0);
+}
+
+.ChangingDetected._cancel {
+  animation: close 1s ease-in 0s;
+  opacity: 0;
+  transition: opacity 0s ease 1s;
+}
+
+.ChangingDetected {
+  opacity: 0;
+  visibility: hidden;
+
+  font-size: 20px;
+  padding: 8px;
+  color: white;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  width: 90%;
+  background: rgba(0, 0, 0, 0.803);
+  transition: opacity 0.3s ease 0s, background-color 0.8s ease 0s;
+}
+
+.ChangingDetected p {
+  flex: 1 1 auto;
+}
+
+.ChangingDetected button {
+  background: transparent;
+  font-size: inherit;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.ChangingDetected button:last-child {
+  background: rgb(33, 186, 12);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  flex: 0 1 25%;
+  transition: flex 1s ease 0s;
+}
+
+.ChangingDetected button:last-child span {
+  transition: transform 0.3s ease 0s;
+  display: block;
+  transform: translateX(20px);
+}
+
+.Loading {
+  visibility: hidden;
+  opacity: 0;
+  width: 40px;
+  height: 40px;
+  transition: visibility 0s, opacity 1s ease 0s;
+}
+
+.ChangingDetected button:last-child._loading span {
+  transform: none;
+}
+
+.ChangingDetected button:last-child._loading {
+  padding: 5px;
+  justify-content: space-between;
+  flex: 0 1 35%;
+}
+
+.ChangingDetected button:last-child._loading .Loading {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+@keyframes show {
+  0% {
+    transform: translate(-50%);
+  }
+  50% {
+    transform: translate(-45%);
+  }
+
+  75% {
+    transform: translate(-55%);
+  }
+  100% {
+    transform: translate(-50%);
+  }
+}
+
+@keyframes show2 {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 40%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes close {
+  0% {
+    opacity: 1;
+    transform: translate(-50%);
+  }
+  50% {
+    transform: translate(-40%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-150%);
+  }
+}
