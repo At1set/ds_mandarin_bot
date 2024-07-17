@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
+import { BrowserRouter, Routes, Route, Link, redirect } from 'react-router-dom';
 
-import Form from "./components/Form";
-import "./styles/clearstyle.css";
-import "./styles/App.css";
+import "./pages/styles/clearstyle.css";
+import "./pages/styles/App.css";
 
-function App() {
-  const [ optionsChanged, setOptionsChanged ] = useState(false);
-  const [ data, setData ] = useState({testFunc: false, secondSwitch: false, Menu_select: '1'})
+import ServerOptions from "./pages/ServerOptions";
+import ErrorPage from "./pages/ErrorPage";
+import Auth from "./pages/Auth";
+import Main from "./pages/Main";
+
+function App() { 
+
   return (
     <div className="App">
-      <Form
-      data={data}
-      setData={setData}
-      optionsChanged={optionsChanged}
-      setOptionsChanged={setOptionsChanged}
-      />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/"         element={<Main />}/>
+          <Route path="/auth"     element={<Auth />}/>
+          <Route path="/:guildID" element={<ServerOptions />}/>
+          <Route path="*"         element={<ErrorPage />}/>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

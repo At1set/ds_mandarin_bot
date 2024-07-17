@@ -1,3 +1,5 @@
+import crypto from "crypto"
+
 export function compareObjects(obj1, obj2) {
   // Проверяем, что оба объекта существуют
   if (!obj1 || !obj2) {
@@ -20,4 +22,10 @@ export function compareObjects(obj1, obj2) {
 
   // Если все свойства и значения одинаковые, объекты равны
   return true
+}
+
+export function createSHA256Hash(inputString) {
+  const hash = crypto.createHash("sha256")
+  hash.update(inputString)
+  return hash.digest("hex")
 }

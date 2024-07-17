@@ -1,5 +1,5 @@
 // Components, React librart
-import React from "react";
+import React, { useState } from "react";
 import Button from "./UI/Button/Button";
 import Loading from "./Loading";
 
@@ -15,8 +15,9 @@ import State from "../utils/State";
 
 const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, oldData}) => {
   const States = State.getStates()
-  const [ subscribe, sendNewOptions ] = useApi();
-  const [ state, setState, startLoading ] = useLoading()
+  const  { subscribe, sendOptions }  = useApi();
+  const { state, setState } = useState(null);
+  const { startLoading } = useLoading({ state, setState })
   
   const saveData = async (data) => {
     console.log("\nСохранение настроек...")
@@ -27,12 +28,12 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, ol
     const result = startLoading(() => subscribe(signal), 10_000) // SUBSCRIBE
     result.then(e => console.log(e))
     await new Promise(resolve => setTimeout(resolve, 500))
-    let loadingData = await startLoading(() => sendNewOptions(data, signal), 5000) // SEND DATA
+    let loadingData = await startLoading(() => sendOptions(data, signal), 5000) // SEND DATA
     console.log(loadingData);
     if (loadingData.error) {
       console.log(loadingData.error);
-      console.log("Сервер не ответил на sendNewOptions!");
-      return controller.abort("Сервер не ответил на sendNewOptions!")
+      console.log("Сервер не ответил на sendOptions!");
+      return controller.abort("Сервер не ответил на sendOptions!")
     } // BREAK SUBSCRIBE
 
     return await result.then(async (loadingData) => {

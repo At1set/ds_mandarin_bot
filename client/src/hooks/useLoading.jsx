@@ -3,9 +3,7 @@ import { useState } from "react";
 // Utils
 import State from "../utils/State";
 
-const useLoading = () => {
-  const [ state, setState ] = useState(null)
-
+const useLoading = ({state, setState}) => {
   async function startLoading(loadFunc, timeOut, breaker=null) {
     function setIsLoading(value) {
       loadingData.isLoading = value
@@ -56,7 +54,7 @@ const useLoading = () => {
     }
   }
 
-  return [ state, setState, startLoading ]
+  return { startLoading }
 };
 
 export default useLoading;

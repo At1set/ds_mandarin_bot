@@ -48,7 +48,6 @@ const Form = ({ data, setData, optionsChanged, setOptionsChanged }) => {
         </ul>
         <Button onClick={async (e) => {
           e.preventDefault()
-          console.log(12/0);
         }}>Submit</Button>
       </form>
       <ChangingDetected
