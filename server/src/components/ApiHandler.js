@@ -1,8 +1,7 @@
 import WSServer from "./WSServer.js"
 
 class ApiHandler {
-  constructor(sendToBot) {
-    this.sendToBot = sendToBot
+  constructor() {
     this.configPath =
       "D:/рабочий стол/Проекты ''Гениального'' верстальщика/ds_mandarin_bot/src/options.json"
     this.subscribers = {}
@@ -39,8 +38,30 @@ class ApiHandler {
     req.on("close", onClose)
   }
 
-  async newOptions(req, res) {
-    console.log("newOptions")
+  async getOptions(req, res) {
+    console.log("getOptions")
+    const guildID = +req.query.guildID
+
+    let botMessage = await WSServer.Instance.sendToBot(
+      guildID,
+      "get_config"
+    )
+    const { status } = botMessage
+
+    if (status === "InternalError") {
+      console.log(botMessage)
+      return res.status(500).json(botMessage)
+    }
+    if (status === "error") {
+      console.log(botMessage)
+      return res.status(500).json(botMessage)
+    }
+
+    return res.status(200).json(botMessage)
+  }
+
+  async updateOptions(req, res) {
+    console.log("updateOptions")
     const guildID = +req.params.guildID
 
     if (!this.subscribers[guildID]) {
@@ -80,10 +101,11 @@ class ApiHandler {
 
     res.status(200).json({ message: "Данные успешно получены!" })
 
-    let botMessage = await WSServer.Instance.sendToBot(guildID, newOptions)
+    console.log(newOptions);
+    let botMessage = await WSServer.Instance.sendToBot(guildID, "update_config", newOptions)
     const { status } = botMessage
 
-    if (!this.subscribers[guildID] || this.subscribers[guildID]["status"] === "wait") return console.log(`Нет уже такого запроса: ${this.subscribers[guildID]["status"]}!`);
+    if (!this.subscribers[guildID] || this.subscribers[guildID]["status"] === "wait") return console.log(`Нет уже такого запроса!`);
 
     const { response } = this.subscribers[guildID]
     if (status === "InternalError") {
