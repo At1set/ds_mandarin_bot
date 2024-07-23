@@ -68,8 +68,7 @@ class AuthHandler {
             client_secret: process.env.CLIENT_SECRET,
             code,
             grant_type: "authorization_code",
-            redirect_uri: `http://localhost:3000/auth`,
-            scope: "identify",
+            redirect_uri: `http://localhost:3000/auth`
           }).toString(),
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",

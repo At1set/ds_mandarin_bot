@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Form from "../components/Form";
+import Form from "../../components/Form/Form";
 
-import "./styles/ServerOptions.css"
-import useApi from "../hooks/useApi";
+import useApi from "../../hooks/useApi";
 
 const ServerOptions = () => {
   const [ optionsChanged, setOptionsChanged ] = useState(false);
@@ -31,11 +30,11 @@ const ServerOptions = () => {
     };
     setOptions();
   }, [])
-  
+
   return (
     <>
-      {loading ? 
-        <div className="Loading">
+      {loading ?
+        <div className="Loading__circle">
           Загрузка...
         </div>
       : false}

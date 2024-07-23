@@ -1,0 +1,12 @@
+.Loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & &__loading_circle {
+    width: 80px;
+    height: 80px;
+    border-color: $blue;
+    box-shadow: 0 0 35px 15px rgb(65, 133, 229);
+  }
+}

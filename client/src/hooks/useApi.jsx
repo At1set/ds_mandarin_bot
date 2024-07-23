@@ -35,7 +35,8 @@ const useApi = () => {
     return response.data;
   }
 
-  const getAuthTocken = async ({ code_challenge, code_challenge_method="S256", ...params }, signal) => {
+  // Получение кода авторизации
+  const getAuthCode = async ({ code_challenge, code_challenge_method="S256", ...params }, signal) => {
     const response = await axios.get("http://localhost:8000/auth/authorize/", {
       signal,
       withCredentials: true,
@@ -48,6 +49,7 @@ const useApi = () => {
     return response.data
   }
 
+  // Получение токена доступа discord
   const getAccessTocken =  async ({ code, code_verifier, redirect_uri, ...data }, signal) => {
     const response = await axios.post("http://localhost:8000/auth/tocken/", JSON.stringify({
       code,
@@ -64,6 +66,7 @@ const useApi = () => {
     return response.data
   }
 
+  // Позволяет удалить сессию на стороне сервера
   const killAuthSession = async () => {
     const response = await axios.get("http://localhost:8000/auth/killSession", {
       withCredentials: true
@@ -71,7 +74,7 @@ const useApi = () => {
     return response.data
   }
 
-  return { subscribe, sendOptions, getOptions, getAuthTocken, getAccessTocken, killAuthSession };
+  return { subscribe, sendOptions, getOptions, getAuthCode, getAccessTocken, killAuthSession };
 };
 
 export default useApi;

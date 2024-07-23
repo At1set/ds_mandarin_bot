@@ -1,27 +1,29 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Link, redirect } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
 
-import "./pages/styles/clearstyle.css";
-import "./pages/styles/App.css";
+import "./styles/App.scss";
 
-import ServerOptions from "./pages/ServerOptions";
-import ErrorPage from "./pages/ErrorPage";
-import Auth from "./pages/Auth";
-import Main from "./pages/Main";
+import AppRouter from "./components/AppRouter";
+import { AuthContext } from "./context/Auth";
 
-function App() { 
+function App() {
+
+  const [ isAuth, setIsAuth ] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      setIsAuth(true)
+    }
+  }, [])
 
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/"         element={<Main />}/>
-          <Route path="/auth"     element={<Auth />}/>
-          <Route path="/:guildID" element={<ServerOptions />}/>
-          <Route path="*"         element={<ErrorPage />}/>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <AuthContext.Provider value={{
+      isAuth,
+      setIsAuth
+    }}>
+      <div className="App">
+        <AppRouter></AppRouter>
+      </div>
+    </AuthContext.Provider>
   );
 }
 

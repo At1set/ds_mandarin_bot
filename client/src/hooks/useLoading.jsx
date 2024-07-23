@@ -1,10 +1,25 @@
-import { useState } from "react";
-
 // Utils
 import State from "../utils/State";
 
-const useLoading = ({state, setState}) => {
-  async function startLoading(loadFunc, timeOut, breaker=null) {
+const useLoading = ({ state, setState }) => {
+  async function startLoading(loadFunc, timeOut="10min", breaker=null) {
+    const error = new Error("ValueError: the value of {timeOut} is invalid!")
+
+    if (typeof timeOut === 'string') {
+      let timeMeasurement = null
+      if (timeOut.includes("s")) timeMeasurement = "s"
+      else if (timeOut.includes("min")) timeMeasurement = "min"
+
+      if (timeMeasurement === null) throw error
+
+      const timeCount = +timeOut.replace(timeMeasurement, "")
+      if (isNaN(timeCount)) throw error
+
+      if (timeMeasurement === "s") timeOut = 1000 * timeCount
+      else if (timeMeasurement === "min") timeOut = 60 * 1000 * timeCount
+      else throw error
+    }
+
     function setIsLoading(value) {
       loadingData.isLoading = value
       return setState(State.get(loadingData))
@@ -33,16 +48,16 @@ const useLoading = ({state, setState}) => {
         }
 
         const timerId = setTimeout(() => {
-            reject(new Error('`Превышено максимальное время ожидания: ' + `${timeOut}ms`));
-          }, timeOut);
+          reject(new Error(`Превышено максимальное время ожидания: ${timeOut}ms`));
+        }, timeOut);
 
-          loadFunc().then((res) => {
-            clearTimeout(timerId);
-            resolve(res);
-          }).catch((err) => {
-            clearTimeout(timerId);
-            reject(err);
-          })
+        loadFunc().then((res) => {
+          clearTimeout(timerId);
+          resolve(res);
+        }).catch((err) => {
+          clearTimeout(timerId);
+          reject(err);
+        })
       });
       const res = await promise;
       setData(res);

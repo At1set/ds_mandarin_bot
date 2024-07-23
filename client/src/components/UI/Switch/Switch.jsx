@@ -1,5 +1,5 @@
 import React from "react";
-import cls from "./Switch.module.css"
+import cls from "./Switch.module.scss"
 
 const Switch = React.forwardRef(({...props}, ref) => {
 

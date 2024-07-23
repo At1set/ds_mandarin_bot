@@ -1,0 +1,135 @@
+.header {
+
+  & {
+    background-color: $darker;
+  }
+  
+  // .header__bot-logo
+
+  & &__container {
+    max-width: 1600px;
+    min-height: 50px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__bot-logo {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  &__user {
+    cursor: pointer;
+
+    img {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      // object-fit: contain;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: rgb(114, 114, 234);
+    }
+  }
+}
+
+.bot-logo {
+
+  // .bot-logo__icon
+
+  &__icon {
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    margin-right: 15px;
+
+    img {
+      max-height: 100%;
+      max-width: 100%;
+      border-radius: inherit;
+    }
+  }
+
+  // .bot-logo__txt
+
+  &__txt {
+
+    h3 {
+      color: $font_active;
+      font-size: 24px;
+      font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+  }
+}
+
+.header-user {
+
+  // .header-user__container
+
+  &__container {
+    display: flex;
+  }
+
+  // .header-user__menu
+
+  &__menu {
+    position: relative;
+  }
+}
+
+.user-menu {
+
+  // .user-menu__arrow
+
+  &__arrow {
+    margin-left: 12px;
+    img {
+      fill: red;
+      transition: transform 0.3s ease 0s;
+      width: 35px;
+      transform: rotateX(180deg);
+    }
+  }
+  &._active &__arrow img {
+    transform: rotateX(0);
+  }
+
+  // .user-menu__menu
+
+  &__menu {
+    background-color: #3a3a3a;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 200px;
+    margin-top: 10px;
+
+    transition: 0.3s ease 0s;
+    transition-property: transform, opacity;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-15%);
+
+    li {
+      color: rgb(236, 236, 236);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 12px;
+
+      transition: background-color 0.2s ease 0s;
+
+      &:hover {
+        background-color: #4d4d4d;
+      }
+    }
+  }
+  &._active &__menu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

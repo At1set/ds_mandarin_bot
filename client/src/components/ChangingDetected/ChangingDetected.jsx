@@ -1,23 +1,23 @@
 // Components, React librart
 import React, { useState } from "react";
-import Button from "./UI/Button/Button";
-import Loading from "./Loading";
+import Button from "../UI/Button/Button";
+import Loading_circle from "../Loading_circle//Loading_circle";
 
 // Styles
-import cls from "./Styles/ChangingDetected.module.css"
+import cls from "./ChangingDetected.module.scss"
 
 // Hooks
-import useApi from "../hooks/useApi"
-import useLoading from "../hooks/useLoading";
+import useApi from "../../hooks/useApi"
+import useLoading from "../../hooks/useLoading";
 
 // Utils
-import State from "../utils/State";
+import State from "../../utils/State";
 
 const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, oldData}) => {
   const States = State.getStates()
   const  { subscribe, sendOptions }  = useApi();
-  const { state, setState } = useState(null);
-  const { startLoading } = useLoading({ state, setState })
+  const [ state, setState ] = useState(null);
+  const { startLoading } = useLoading({ state, setState });
   
   const saveData = async (data) => {
     console.log("\nСохранение настроек...")
@@ -41,7 +41,7 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, ol
 
       const delay = startTime - performance.now()
       if (delay < 1000) {
-        setState(States.LOADING)
+        setState(States.Loading_circle)
         await new Promise(resolve => setTimeout(resolve, 1500))
         let { status } = loadingData.data
         if (status === "ok") setState(States.SUCCESS)
@@ -114,15 +114,15 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, ol
       </p>
       <Button
       style={ButtonsStyle}
-      disabled={[States.LOADING, States.SUCCESS].includes(state) || !isActive}
+      disabled={[States.Loading_circle, States.SUCCESS].includes(state) || !isActive}
       onClick={handleCancel}>Отменить</Button>
       <Button
-      className={state === States.LOADING ? cls._loading : ""}
+      className={state === States.Loading_circle ? cls._loading : ""}
       style={ButtonsStyle}
-      disabled={[States.LOADING, States.SUCCESS].includes(state) || !isActive}
+      disabled={[States.Loading_circle, States.SUCCESS].includes(state) || !isActive}
       onClick={handleSave}>
         <span>Сохранить</span>
-        <Loading className={cls.Loading} />
+        <Loading_circle className={cls.Loading_circle} />
       </Button>
     </div>
   )
