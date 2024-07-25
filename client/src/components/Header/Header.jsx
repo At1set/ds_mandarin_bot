@@ -1,15 +1,20 @@
-import React from "react";
+import React, { Suspense } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { Await, defer, useAsyncValue, useLoaderData, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 import Button from "../UI/Button/Button.jsx"
 import Loading_circle from "../Loading_circle/Loading_circle.jsx"
 import { useAuthContext } from "../../context/Auth.jsx";
 
-import icon_arrow from "../../images/icon-arrow.svg"
+import { getUser } from "../../utils/fetchDiscord.js";
 
-const Header = ({user, ...props}) => {
+import icon_arrow from "../../images/icon-arrow.svg"
+import Loading from "../../pages/Loading/Loading.jsx";
+import useDiscord from "../../hooks/useDiscord.jsx";
+import LoaderData from "../../hoc/LoaderData.jsx";
+
+const HeaderComponent = ({...props}) => {
   const navigate = useNavigate();
 
   const { login } = useAuth();
@@ -30,7 +35,8 @@ const Header = ({user, ...props}) => {
     }
   }
 
-  console.log(isAuth);
+  const { data: user, error } = useDiscord(useAsyncValue())
+  console.log(user, error);
 
   return (
     <header {...props} className="header">
@@ -54,7 +60,31 @@ const Header = ({user, ...props}) => {
   )
 }
 
-export default Header;
+const Header = ({...props}) => {
+  const { isAuth } = useAuthContext();
+  const loaderData = useLoaderData();
+
+  if (isAuth) return (
+    <LoaderData
+      resolve={loaderData.user}
+      fallback={<Loading/>}
+    >
+      <HeaderComponent {...props}/>
+    </LoaderData>
+  )
+  return <HeaderComponent {...props}/>
+}
+
+export { HeaderLoader, Header };
+
+async function HeaderLoader() {
+  const user = getUser()
+
+  return defer({
+    user: user
+  })
+}
+
 
 function LoginButton({...props}) {
 
