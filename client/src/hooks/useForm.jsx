@@ -1,28 +1,10 @@
 import { useRef, useEffect } from "react";
 
-const useForm = ({ data, checkIsUpdated, setFromElemVal }) => {
+const useForm = ({ data, setFromElemVal }) => {
   const form = useRef();
 
   useEffect(() => {
-    const formNodes = Array.from(form.current.elements);
-    formNodes.forEach((elem) => {
-      setFromElemVal((prevValues) => ({
-        ...prevValues,
-        [elem.name]: data[elem.name],
-      }));
-    });
-    // formNodes.forEach((e) => {
-    //   if (e.tagName != "BUTTON" && e.type !== "checkbox") {
-    //     e.addEventListener("change", checkIsUpdated);
-    //   }
-    // });
-    // return () => {
-    //   formNodes.forEach((e) => {
-    //     if (e.tagName != "BUTTON") {
-    //       e.removeEventListener("change", checkIsUpdated);
-    //     }
-    //   });
-    // };
+    setFromElemVal(data)
   }, [data]);
 
   const serializeForm = (formNode) => {

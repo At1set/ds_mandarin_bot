@@ -2,21 +2,23 @@ import React from "react"
 
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 
-import ServerOptions from "../pages/ServerOptions/ServerOptions";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
-import UserServers from "../pages/UserServers/UserServers";
+import { UserGuildsRoute } from "../pages/UserGuilds/UserGuilds";
 import Auth from "../pages/Auth/Auth";
 import Main from "../pages/Main/Main";
-import { HeaderLoader } from "./Header/Header";
+import Layout from "./Layout/Layout";
+
+import RequiredAuth from "../hoc/RequiredAuth"
 
 const router = createBrowserRouter(createRoutesFromElements(
-  <Route path="/">
-    <Route index                      element={<Main/>} loader={HeaderLoader}/>
-    <Route path="auth"                element={<Auth />} />
-    <Route path="dashboard"           element={<UserServers />}/>
-    <Route path="dashboard/:guildID"  element={<ServerOptions />}/>
-    <Route path="*"                   element={<ErrorPage />}/>
-  </Route>
+  <>
+    <Route path="/" element={<Layout />}>
+      <Route index                      element={<Main />}/>
+      <Route path="dashboard/*"         element={<RequiredAuth children={<UserGuildsRoute />} />}/>
+    </Route>
+    <Route path="/auth"                element={<Auth />} />
+    <Route path="/*"                   element={<ErrorPage />}/>
+  </>
 ))
 
 const AppRouter = () => {

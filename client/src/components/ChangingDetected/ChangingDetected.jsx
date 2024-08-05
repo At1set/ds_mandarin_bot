@@ -13,9 +13,9 @@ import useLoading from "../../hooks/useLoading";
 // Utils
 import State from "../../utils/State";
 
-const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, oldData}) => {
+const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setFromElemVal, setData, oldData}) => {
   const States = State.getStates()
-  const  { subscribe, sendOptions }  = useApi();
+  const { subscribe, sendOptions } = useApi();
   const [ state, setState ] = useState(null);
   const { startLoading } = useLoading({ state, setState });
   
@@ -27,7 +27,9 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, ol
 
     const result = startLoading(() => subscribe(signal), 10_000) // SUBSCRIBE
     result.then(e => console.log(e))
+
     await new Promise(resolve => setTimeout(resolve, 500))
+    
     let loadingData = await startLoading(() => sendOptions(data, signal), 5000) // SEND DATA
     console.log(loadingData);
     if (loadingData.error) {
@@ -41,7 +43,7 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, ol
 
       const delay = startTime - performance.now()
       if (delay < 1000) {
-        setState(States.Loading_circle)
+        setState(States.LOADING)
         await new Promise(resolve => setTimeout(resolve, 1500))
         let { status } = loadingData.data
         if (status === "ok") setState(States.SUCCESS)
@@ -70,12 +72,13 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, ol
     if (state === States.CANCEL) return
     setState(States.CANCEL)
     setTimeout(() => {
+      setFromElemVal(oldData);
       setOptionsChanged(false);
       setState(null)
     }, 1000);
   };
 
-  let classes = [cls.ChangingDetected]
+  let classes = ["ChangingDetected", cls.ChangingDetected]
   if (isActive) classes.push(cls._active);
   (state === States.SUCCESS) && classes.push(cls._successfully);
   (state === States.ERROR)   && classes.push(cls._error);
@@ -114,12 +117,12 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setData, ol
       </p>
       <Button
       style={ButtonsStyle}
-      disabled={[States.Loading_circle, States.SUCCESS].includes(state) || !isActive}
+      disabled={[States.LOADING, States.SUCCESS].includes(state) || !isActive}
       onClick={handleCancel}>Отменить</Button>
       <Button
-      className={state === States.Loading_circle ? cls._loading : ""}
+      className={state === States.LOADING ? cls._loading : ""}
       style={ButtonsStyle}
-      disabled={[States.Loading_circle, States.SUCCESS].includes(state) || !isActive}
+      disabled={[States.LOADING, States.SUCCESS].includes(state) || !isActive}
       onClick={handleSave}>
         <span>Сохранить</span>
         <Loading_circle className={cls.Loading_circle} />

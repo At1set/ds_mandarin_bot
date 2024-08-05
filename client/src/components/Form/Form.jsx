@@ -7,10 +7,9 @@ import Switch from "../UI/Switch/Switch";
 import { compareObjects } from "../../utils/functions";
 import useForm from "../../hooks/useForm";
 
-const Form = ({ data, setData, optionsChanged, setOptionsChanged }) => {
+const Form = ({ data, setData, optionsChanged, setOptionsChanged, ...props }) => {
   const checkIsUpdated = () => {
     let formData = serializeForm(form.current)
-    // console.log(formData, data);
     return setOptionsChanged(!compareObjects(formData, data))
   }
   
@@ -23,11 +22,11 @@ const Form = ({ data, setData, optionsChanged, setOptionsChanged }) => {
     checkIsUpdated()
   };
   
-  const [ form, serializeForm ] = useForm({ data, checkIsUpdated, setFromElemVal });
+  const [ form, serializeForm ] = useForm({ data, setFromElemVal });
   
   return (
     <>
-      <form ref={form}>
+      <form ref={form} {...props}>
         <ul>
           <li>
             <h4 className="label">Включает боту тестовую функцию</h4>
@@ -54,6 +53,7 @@ const Form = ({ data, setData, optionsChanged, setOptionsChanged }) => {
         isActive={optionsChanged}
         setOptionsChanged={setOptionsChanged}
         getFormData={() => serializeForm(form.current)}
+        setFromElemVal={setFromElemVal}
         setData={setData}
         oldData={data}
       />

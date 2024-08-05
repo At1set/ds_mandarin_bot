@@ -1,62 +1,85 @@
-import React, { useEffect, useState } from "react";
-import Form from "../../components/Form/Form";
+import React, { useEffect, useState } from "react"
+import Form from "../../components/Form/Form"
 
-import useApi from "../../hooks/useApi";
+import useApi from "../../hooks/useApi"
+import { useAuthContext } from "../../context/Auth"
+import State from "../../utils/State"
+import useLoading from "../../hooks/useLoading"
+import axios from "axios"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 const ServerOptions = () => {
-  const [ optionsChanged, setOptionsChanged ] = useState(false);
-  const [ data, setData ] = useState({testFunc: false, secondSwitch: false, Menu_select: '1'})
-  const [ error, setError ] = useState(null)
-  const [ loading, setLoading ] = useState(null)
-  const { getOptions } = useApi();
+  const States = State.getStates();
+  const navigate = useNavigate();
+  const params = useParams();
+  const location = useLocation();
+
+  const [optionsChanged, setOptionsChanged] = useState(false)
+  const [data, setData] = useState({
+    testFunc: false,
+    secondSwitch: false,
+    Menu_select: "1",
+  })
+
+  const { dataLoader, userGuilds, setUserGuilds } = useAuthContext()
+
+  const { getOptions } = useApi()
+  const [state, setState] = useState(States.LOADING)
+  const { startLoading } = useLoading({ state, setState })
+
+  function getGuildOptions(guildID) {
+    dataLoader.setLoadingState("UserOptions", true)
+    startLoading(() =>
+      getOptions({ guildID })
+    ).then((res) => {
+      console.log(res)
+      dataLoader.setLoadingState("UserOptions", false)
+      if (!res.error) return setData(res.data.message)
+      if (
+        res.error instanceof axios.AxiosError &&
+        res.error?.response.data.status ===
+          "Options don't exists error"
+      ) {
+        return setState(States.SUCCESS)
+      }
+      return setData(res)
+    })
+  }
+
+  function validateGuild(guildID) {
+    return userGuilds.filter(guild => guild.id === guildID).length >= 1
+  }
 
   useEffect(() => {
-    const setOptions = async () => {
-      setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      try {
-        let options = await getOptions( {
-          guildID: window.location.href.split("/").pop()
-        } )
-        console.log(options);
-        if (options.status === "ok") return setData(options.message)
-      } catch (error) {
-        let errorMess = "Произошла ошибка: не удалось получить актуальные настройки от сервера!"
-        if (error?.response?.data) errorMess += "\n" + JSON.stringify(error.response.data)
-        return setError(errorMess);
-      } finally {
-        setLoading(false)
-      }
-    };
-    setOptions();
-  }, [])
+    const guildID = params?.guildID
+    
+    if (!location.state?.userGuilds || !guildID) return navigate("/dashboard")
+    else if (!userGuilds) return setUserGuilds(location.state.userGuilds)
+    
+    if (!validateGuild(guildID)) return navigate("/dashboard")
+    
+    getGuildOptions(guildID)
+  }, [userGuilds])
 
   return (
-    <>
-      {loading ?
-        <div className="Loading__circle">
-          Загрузка...
-        </div>
-      : false}
-      {error ? (
-        <div
-          style={
-            {
-              textAlign: "center",
-              fontSize: 24,
-              padding: "20% 10px 0 10px",
-            }
-          }
-        >{error}</div>
-      ) : (
-        <Form
-          data={data}
-          setData={setData}
-          optionsChanged={optionsChanged}
-          setOptionsChanged={setOptionsChanged}
-        />
-      )}
-    </>
+    <section className="ServerOptions page_root">
+      <div className="ServerOptions__container">
+        {state === States.ERROR && (
+          <div className="errorBox">{`${
+            data.error?.request.response || "Произошла непридвиденная ошибка!"
+          }`}</div>
+        )}
+        {state === States.SUCCESS && (
+          <Form
+            className="ServerOptions__form form"
+            data={data}
+            setData={setData}
+            optionsChanged={optionsChanged}
+            setOptionsChanged={setOptionsChanged}
+          />
+        )}
+      </div>
+    </section>
   )
 }
 

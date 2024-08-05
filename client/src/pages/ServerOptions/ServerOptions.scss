@@ -1,14 +1,36 @@
-.Loading__circle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+.ServerOptions {
+  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 
-  font-size: 30px;
-  background-color: #fff;
-  z-index: 10;
+  &__container {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .errorBox {
+      text-align: center;
+      font-size: 30px;
+  
+      width: 100%;
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__form {
+    width: 80%;
+  }
+}
+
+.ChangingDetected {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 80%;
+  min-width: 420px;
 }

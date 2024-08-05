@@ -1,8 +1,8 @@
 // Utils
 import State from "../utils/State";
 
-const useLoading = ({ state, setState }) => {
-  async function startLoading(loadFunc, timeOut="10min", breaker=null) {
+const useLoading = ({ setState }) => {
+  async function startLoading(loadFunc, timeOut="10min") {
     const error = new Error("ValueError: the value of {timeOut} is invalid!")
 
     if (typeof timeOut === 'string') {
@@ -43,10 +43,6 @@ const useLoading = ({ state, setState }) => {
 
     try {
       const promise = new Promise((resolve, reject) => {
-        if (breaker) {
-          breaker.funcitons.push(() => reject("Canceling promise..."))
-        }
-
         const timerId = setTimeout(() => {
           reject(new Error(`Превышено максимальное время ожидания: ${timeOut}ms`));
         }, timeOut);

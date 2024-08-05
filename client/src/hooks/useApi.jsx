@@ -27,6 +27,7 @@ const useApi = () => {
 
   const getOptions = async ({guildID, ...params}, signal) => {
     const response = await axios.get("http://localhost:8000/api/getOptions", {
+      signal,
       params: {
         guildID,
         ...params,

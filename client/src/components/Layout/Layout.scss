@@ -1,0 +1,33 @@
+.wrapper {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  
+  width: 100%;
+  max-width: $siteWidth + px;
+  margin: 0 auto;
+
+  &._ServerOptions {
+    display: grid;
+    grid-template-rows: $header-hight+px 1fr;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+    "sidebar header"
+    "sidebar page_root";
+
+    .page_root {padding-top: 0;}
+  }
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.header {
+  grid-area: header;
+}
+
+.page_root {
+  grid-area: page_root;
+}

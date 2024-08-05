@@ -1,0 +1,15 @@
+.Notification {
+  transition: opacity 2s ease 0s;
+  opacity: 0;
+
+  font-size: 20px;
+  color: greenyellow; 
+}
+
+._active {
+  opacity: 1;
+}
+
+._error {
+  color: red;
+}

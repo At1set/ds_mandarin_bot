@@ -1,27 +1,36 @@
-import React, { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
-import useDiscord from "../../hooks/useDiscord.jsx";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom"
 
-import { Header } from "../../components/Header/Header"
-import Loading from "../Loading/Loading.jsx";
-import useLoading from "../../hooks/useLoading.jsx";
-import State from "../../utils/State.js";
+import Notification from "../../components/Notification/Notification.jsx";
+import useNotification from "../../hooks/useNotification.jsx";
+import { useAuthContext } from "../../context/Auth.jsx";
 
 const Main = () => {
   const location = useLocation();
-  const [ user, setUser ] = useState(null);
+  const navigate = useNavigate();
 
-  const [ state, setState ] = useState(null);
-  const { startLoading } = useLoading({ state, setState })
+  const [ notification, setNotification ] = useState({show: false, message: "", isError: false})
+  const { showNotification } = useNotification({ notification, setNotification });
+
+  const { isAuth } = useAuthContext()
 
   useEffect(() => {
+    if (location.state?.redirectedFrom && isAuth) { // For RequiredAuth hoc only when reloading page
+      const redirectedUrl = location.state.redirectedFrom
+      return navigate(redirectedUrl.pathname, {replace: true, state: redirectedUrl.state})
+    }
+    if (location.state?.state) showNotification(location.state.state)
     return window.history.replaceState({}, '')
   }, [])
 
   return (
-    <div className="Main page_root">
-      <Header />
-    </div>
+    <section className="Main page_root">
+      <Notification
+        message={notification.message}
+        show={notification.show}
+        isError={notification.isError}
+      />
+    </section>
   )
 }
 

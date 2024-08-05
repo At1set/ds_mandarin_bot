@@ -1,0 +1,93 @@
+.UserGuild {
+  // .UserGuild__banner
+
+  &__banner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 152px;
+    overflow: hidden;
+    background-color: rgb(31, 33, 41);
+
+    border-radius: 20px;
+  }
+
+  // .UserGuild__bottom
+
+  &__bottom {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: column;
+
+    margin-top: 20px;
+  }
+}
+
+.guild-banner {
+
+  // .guild-banner__backGround
+
+  &__backGround {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: no-repeat center / cover;
+    transform: scale(1.2);
+
+    filter: blur(12px);
+  }
+
+  // .guild-banner__img
+
+  &__img {
+    position: relative;
+    z-index: 1;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgb(230, 211, 211);
+  }
+
+  &__no-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgb(230, 211, 211);
+    background-color: $bg;
+  }
+}
+
+.guild-bottom {
+
+  // .guild-bottom__guildName
+
+  &__guildName {
+
+    font-size: 25px;
+  }
+
+  // .guild-bottom__isOwner
+
+  &__isOwner {
+    padding-top: 10px;
+  }
+
+  &__btn {
+    margin-left: 20px;
+    grid-row: span 2;
+    text-decoration: none;
+
+    background: $blue;
+    padding: 10px 20px;
+    border-radius: 10px;
+
+    font-size: 30px;
+    color: white;
+    max-height: 50px;
+  }
+}

@@ -40,7 +40,7 @@ class ApiHandler {
 
   async getOptions(req, res) {
     console.log("getOptions")
-    const guildID = +req.query.guildID
+    const guildID = req.query.guildID
 
     let botMessage = await WSServer.Instance.sendToBot(
       guildID,
@@ -48,21 +48,16 @@ class ApiHandler {
     )
     const { status } = botMessage
 
-    if (status === "InternalError") {
-      console.log(botMessage)
-      return res.status(500).json(botMessage)
+    if (status === "ok") {
+      return res.status(200).json(botMessage)
     }
-    if (status === "error") {
-      console.log(botMessage)
-      return res.status(500).json(botMessage)
-    }
-
-    return res.status(200).json(botMessage)
+    console.log(botMessage)
+    return res.status(500).json(botMessage)
   }
 
   async updateOptions(req, res) {
     console.log("updateOptions")
-    const guildID = +req.params.guildID
+    const guildID = req.params.guildID
 
     if (!this.subscribers[guildID]) {
       console.log("Не найден такой подписчик, запрос идет нахуй!")
@@ -108,16 +103,11 @@ class ApiHandler {
     if (!this.subscribers[guildID] || this.subscribers[guildID]["status"] === "wait") return console.log(`Нет уже такого запроса!`);
 
     const { response } = this.subscribers[guildID]
-    if (status === "InternalError") {
-      console.log(botMessage)
-      return response.status(500).json(botMessage)
+    if (status === "ok") {
+      return response.status(200).json(botMessage)
     }
-    if (status === "error") {
-      console.log(botMessage)
-      return response.status(500).json(botMessage)
-    }
-
-    return response.status(200).json(botMessage)
+    console.log(botMessage)
+    return response.status(500).json(botMessage)
   }
 }
 

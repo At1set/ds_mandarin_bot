@@ -25,10 +25,6 @@
   font-size: 20px;
   padding: 8px;
   color: white;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  position: absolute;
   display: flex;
   align-items: center;
   width: 90%;
@@ -63,7 +59,7 @@
   transform: translateX(20px);
 }
 
-.Loading {
+.ChangingDetected .Loading_circle {
   visibility: hidden;
   opacity: 0;
   width: 40px;
@@ -81,7 +77,7 @@
   flex: 0 1 35%;
 }
 
-.ChangingDetected button:last-child._loading .Loading {
+.ChangingDetected button:last-child._loading .Loading_circle {
   visibility: visible;
   opacity: 1;
 }
