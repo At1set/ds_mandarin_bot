@@ -12,8 +12,12 @@
 
   &__container {
     flex: 1 1 auto;
+    position: relative;
   
     .errorBox {
+      position: absolute;
+      left: 0;
+      top: 0;
       text-align: center;
       font-size: 30px;
   

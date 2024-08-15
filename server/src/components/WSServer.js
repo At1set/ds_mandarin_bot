@@ -54,7 +54,7 @@ export default class WSServer {
       const timeout = setTimeout(() => {
         this.Bot.off("message", messageHandler)
         reject(new Error("Bot did not respond in time!"))
-      }, 5000) // 5 seconds timeout
+      }, 8000) // 5 seconds timeout
     }).catch(err => new Object({ status: "InternalError", message: err.message }))
 
     return res

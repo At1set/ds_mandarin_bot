@@ -1,4 +1,6 @@
 import WSServer from "./WSServer.js"
+import axios from "axios"
+import { v4 } from "uuid"
 
 class ApiHandler {
   constructor() {
@@ -20,7 +22,7 @@ class ApiHandler {
           .status(400)
           .json({ message: "Время вышло. Сервер прервал вашу подписку!" })
       } catch (error) {
-        return console.log("Пизда нахуй");
+        return console.log("Пизда нахуй")
       }
     }, 2000)
 
@@ -42,10 +44,7 @@ class ApiHandler {
     console.log("getOptions")
     const guildID = req.query.guildID
 
-    let botMessage = await WSServer.Instance.sendToBot(
-      guildID,
-      "get_config"
-    )
+    let botMessage = await WSServer.Instance.sendToBot(guildID, "get_config")
     const { status } = botMessage
 
     if (status === "ok") {
@@ -65,8 +64,7 @@ class ApiHandler {
         return res
           .status(400)
           .json({ message: "Вы не подписаны на уведомление от бота!" })
-      }
-      catch {
+      } catch {
         return console.log("Скипаю ошибочку")
       }
     } else {
@@ -88,7 +86,7 @@ class ApiHandler {
       return res
         .status(400)
         .json({ message: "Вы прислали некоректные данные!" })
-    
+
     this.subscribers[guildID]["options"] = newOptions
 
     const { timeout } = this.subscribers[guildID]
@@ -96,11 +94,19 @@ class ApiHandler {
 
     res.status(200).json({ message: "Данные успешно получены!" })
 
-    console.log(newOptions);
-    let botMessage = await WSServer.Instance.sendToBot(guildID, "update_config", newOptions)
+    console.log(newOptions)
+    let botMessage = await WSServer.Instance.sendToBot(
+      guildID,
+      "update_config",
+      newOptions
+    )
     const { status } = botMessage
 
-    if (!this.subscribers[guildID] || this.subscribers[guildID]["status"] === "wait") return console.log(`Нет уже такого запроса!`);
+    if (
+      !this.subscribers[guildID] ||
+      this.subscribers[guildID]["status"] === "wait"
+    )
+      return console.log(`Нет уже такого запроса!`)
 
     const { response } = this.subscribers[guildID]
     if (status === "ok") {
@@ -108,6 +114,57 @@ class ApiHandler {
     }
     console.log(botMessage)
     return response.status(500).json(botMessage)
+  }
+
+  async getUserGuilds(req, res) {
+    console.log("getUserGuilds")
+
+    const tocken = req.query?.tocken
+    if (!tocken) return res.status(400).json({
+      status: "error",
+      message: "Вы не указали tocken!"
+    })
+
+    let userGuilds = null
+    try {
+      const request = await axios.get(
+        "https://discord.com/api/users/@me/guilds",
+        {
+          headers: {
+            Authorization: `Bearer ${tocken}`,
+          },
+        }
+      )
+      userGuilds = request.data
+      userGuilds = userGuilds.filter((guild) => guild.owner) // Фильтрация. Получаем гильдии, которые принадлежат пользователю
+    } catch (error) {
+      if (error instanceof axios.AxiosError) {
+        return res.status(error.response?.status || 500).json({
+          status: "InternalError",
+          message:
+            error.response?.data ||
+            "Сервер не смог получить гильдии пользователя!",
+        })
+      } else throw error
+    }
+
+    const botMessage_id = v4()
+    const userGuildsIdArray = userGuilds.map(guild => guild.id)
+    let botMessage = await WSServer.Instance.sendToBot(
+      botMessage_id,
+      "getUserGuilds",
+      userGuildsIdArray
+    )
+    const { status, message } = botMessage
+
+    if (status === "ok" && message) {
+      userGuilds.forEach((guild, index) => {
+        guild.isBot = message[index]
+      });
+      return res.status(200).json(userGuilds)
+    }
+    console.log(botMessage)
+    return res.status(500).json(botMessage)
   }
 }
 

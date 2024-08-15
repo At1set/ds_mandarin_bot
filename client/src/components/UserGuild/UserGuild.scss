@@ -77,17 +77,21 @@
     padding-top: 10px;
   }
 
-  &__btn {
+  & &__btn {
     margin-left: 20px;
     grid-row: span 2;
     text-decoration: none;
 
-    background: $blue;
+    background-color: $blue;
     padding: 10px 20px;
     border-radius: 10px;
 
     font-size: 30px;
     color: white;
     max-height: 50px;
+
+    &_setup {
+      background-color: rgb(132, 138, 142);
+    }
   }
 }

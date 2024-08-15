@@ -9,6 +9,7 @@ import Main from "../pages/Main/Main";
 import Layout from "./Layout/Layout";
 
 import RequiredAuth from "../hoc/RequiredAuth"
+import GuildInstall from "../pages/GuildInstall/GuildInstall";
 
 const router = createBrowserRouter(createRoutesFromElements(
   <>
@@ -17,6 +18,7 @@ const router = createBrowserRouter(createRoutesFromElements(
       <Route path="dashboard/*"         element={<RequiredAuth children={<UserGuildsRoute />} />}/>
     </Route>
     <Route path="/auth"                element={<Auth />} />
+    <Route path="/guild-install"       element={<GuildInstall />} />
     <Route path="/*"                   element={<ErrorPage />}/>
   </>
 ))

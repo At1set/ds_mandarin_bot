@@ -2,7 +2,7 @@
 import State from "../utils/State";
 
 const useLoading = ({ setState }) => {
-  async function startLoading(loadFunc, timeOut="10min") {
+  async function startLoading(loadFunc, timeOut="10min", ignore_state=false) {
     const error = new Error("ValueError: the value of {timeOut} is invalid!")
 
     if (typeof timeOut === 'string') {
@@ -22,14 +22,17 @@ const useLoading = ({ setState }) => {
 
     function setIsLoading(value) {
       loadingData.isLoading = value
+      if (ignore_state) return
       return setState(State.get(loadingData))
     }
     function setError(value) {
       loadingData.error = value
+      if (ignore_state) return
       return setState(State.get(loadingData))
     }
     function setData(value) {
       loadingData.data = value
+      if (ignore_state) return
       return setState(State.get(loadingData))
     }
 

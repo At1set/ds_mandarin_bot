@@ -9,6 +9,7 @@ import Loading_circle from "../Loading_circle/Loading_circle.jsx"
 import { useAuthContext } from "../../context/Auth.jsx";
 
 import icon_arrow from "../../images/icon-arrow.svg"
+import MenuBurger from "../MenuBurger/MenuBurger.jsx";
 
 const Header = ({...props}) => {
   const navigate = useNavigate();
@@ -44,6 +45,8 @@ const Header = ({...props}) => {
           </div>
           <div className="bot-logo__txt"><h3>Mandarin bot</h3></div>
         </div>
+
+        <MenuBurger/>
 
         <div className="header__user header-user">
           

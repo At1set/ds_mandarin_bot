@@ -30,7 +30,7 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setFromElem
 
     await new Promise(resolve => setTimeout(resolve, 500))
     
-    let loadingData = await startLoading(() => sendOptions(data, signal), 5000) // SEND DATA
+    let loadingData = await startLoading(() => sendOptions(data, signal), 5000, true) // SEND DATA
     console.log(loadingData);
     if (loadingData.error) {
       console.log(loadingData.error);
@@ -41,7 +41,9 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setFromElem
     return await result.then(async (loadingData) => {
       if (loadingData.error) return
 
-      const delay = startTime - performance.now()
+      const delay = performance.now() - startTime
+      console.log(`Данные сохранены! длительность: ${Math.round(delay)}ms`);
+      
       if (delay < 1000) {
         setState(States.LOADING)
         await new Promise(resolve => setTimeout(resolve, 1500))
@@ -49,6 +51,7 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setFromElem
         if (status === "ok") setState(States.SUCCESS)
         else setState(States.ERROR)
       }
+
       return loadingData.data
     }) 
   }
@@ -59,7 +62,6 @@ const ChangingDetected = ({isActive, setOptionsChanged, getFormData, setFromElem
     const data = getFormData()
     setData(data)
     let res = await saveData(data)
-    console.log(res);
     if (!res) setData(oldData)
     else setData(res.message)
     setTimeout(() => {

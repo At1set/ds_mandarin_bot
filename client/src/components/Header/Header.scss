@@ -8,6 +8,13 @@
     left: 0;
     width: 100%;
     z-index: 20;
+
+    // Крупные телефоны и протативные планшеты //
+    @media (max-width: #{$mb3+px}) {
+      body._lock &{
+        background-color: transparent;
+      }
+    }
   }
 
   & &__container {
@@ -50,6 +57,13 @@
 
     &__user {
       margin-left: auto;
+
+      // Крупные телефоны и протативные планшеты //
+      @media (max-width: #{$mb3+px}) {
+        &{
+          margin-left: 0;
+        }
+      }
     }
   }
 }
@@ -90,6 +104,10 @@
 
   &__container {
     display: flex;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    max-width: none;
   }
 
   // .header-user__menu

@@ -1,0 +1,75 @@
+@media (max-width: #{$mb3 + px}) {
+  //=======<MENU-BURGER>======
+  //<FOR SPAN-FORMUL>====
+  $burger-height: 20px;
+  $burger-width: 30px;
+  //</FOR SPAN-FORMUL>===
+  .menu-burger {
+    //<POSITION>================
+    position: relative;
+    // top: 20px;
+    // right: 15px;
+    margin-left: auto;
+    margin-right: 20px;
+    z-index: 30;
+    //<POSITION>================
+    height: $burger-height;
+    width: $burger-width;
+  }
+  //=========================
+
+  //<MENU-LINES>=====================
+  $color-lines: red; //COLOR-LINES
+  $height-lines: 3px;  //HEIGH-LINES
+
+  .menu-burger { 
+    & span:nth-child(2) {
+      display: block;
+      position: absolute;
+      top: calc($burger-height/2 - $height-lines/2);
+      height: $height-lines;
+      width: 100%;
+      background-color: $color-lines;
+    }
+
+    & span:nth-child(1),
+    & span:nth-child(3) {
+      content: "";
+      display: block;
+      position: absolute;
+      height: $height-lines;
+      background-color: $color-lines;
+      width: 100%;
+    }
+
+    & span:nth-child(1) {top: 0;}
+    & span:nth-child(3) {bottom: 0;}
+    //</MENU-LINES>====================
+    //<ANIMATION>=================================================================
+    // & span {transition: 0.3s ease 0s;transition-property: all;}
+    & {
+      --duration: 0.3s;
+      --delay: 0;
+      --deg1: 0;
+      --deg2: 0;
+      --translateYMiddlePos1: 0;
+      --translateYMiddlePos2: 0;
+    }
+    & span {transition: all ease 0.3s 0s;transition-duration: var(--duration, 0.3s)}
+    & span:nth-child(1) {transform: translateY(var(--translateYMiddlePos1, 0))}
+    & span:nth-child(2) {transition-delay: var(--delay, 0)}
+    & span:nth-child(3) {transform: translateY(var(--translateYMiddlePos2, 0))}
+    //</ANIMATION>================================================================
+
+    //<MENU-BURGER _ACTIVE>=================
+    // &._active span:nth-child(1) {transform: translateY(calc(($burger-height / 2) - ($height-lines / 2))) rotate(45deg);}
+    // &._active span:nth-child(2) {transform: scale(0);}
+    // &._active span:nth-child(3) {transform: translateY(calc(($burger-height / 2) - ($height-lines / 2)) * (-1)) rotate(-45deg);}
+
+    &._active span:nth-child(1) {transform: translateY(calc(($burger-height / 2) - ($height-lines / 2))) rotate(var(--deg1, 0))}
+    &._active span:nth-child(2) {transform: scale(0);}
+    &._active span:nth-child(3) {transform: translateY(calc(($burger-height / 2) - ($height-lines / 2)) * (-1)) rotate(var(--deg2, 0))}
+    //</MENU-BURGER _ACTIVE>================
+    //=======</MENU-BURGER>======
+  }
+}

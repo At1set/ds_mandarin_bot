@@ -75,7 +75,20 @@ const useApi = () => {
     return response.data
   }
 
-  return { subscribe, sendOptions, getOptions, getAuthCode, getAccessTocken, killAuthSession };
+  const getUserGuilds = async ( signal ) => {
+    const tocken = localStorage.getItem("access_token")
+    if (!tocken) throw new Error("Пользователь не авторизован!");
+    
+    const response = await axios.get("http://localhost:8000/api/getUserGuilds", {
+      signal: signal,
+      params: {
+        tocken
+      }
+    })
+    return response.data
+  }
+
+  return { subscribe, sendOptions, getOptions, getAuthCode, getAccessTocken, killAuthSession, getUserGuilds };
 };
 
 export default useApi;

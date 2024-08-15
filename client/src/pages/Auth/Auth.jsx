@@ -19,18 +19,18 @@ const Auth = () => {
 
   const States = State.getStates()
 
-  const exit = async (args={state}) => {
-    const { state: auth_state, ...data } = args
-    if (auth_state === States.SUCCESS) {
-      localStorage.removeItem("code_verifier")
-      localStorage.removeItem("state")
-      setIsAuth(true)
-    } else localStorage.clear();
-    console.log(await killAuthSession());
-    return navigate("/", {replace: true, state: {state: auth_state, ...data}});
-  }
-
   useEffect(() => {
+    const exit = async (args={state}, isSoftExit=false) => {
+      const { state: auth_state, ...data } = args
+      if (auth_state === States.SUCCESS) {
+        localStorage.removeItem("code_verifier")
+        localStorage.removeItem("state")
+        setIsAuth(true)
+      } else if (!isSoftExit) localStorage.clear();
+      console.log(await killAuthSession());
+      return navigate("/", {replace: true, state: {state: auth_state, ...data}});
+    }
+
     const authorizing = async () => {
       // Пользователь отклонил авторизацию
       const auth_error = searchParams.get('error')
@@ -48,7 +48,7 @@ const Auth = () => {
       // Проверка на присутствие кода авторизации
       const code = searchParams.get('code')
       const code_verifier = localStorage.getItem("code_verifier")
-      if (!code || !code_verifier) return await exit({state: States.ERROR, reason: "Проверка на присутствие кода авторизации не прошла"})
+      if (!code || !code_verifier) return await exit({state: States.ERROR, reason: "Проверка на присутствие кода авторизации не прошла"}, true)
 
 
       // {
