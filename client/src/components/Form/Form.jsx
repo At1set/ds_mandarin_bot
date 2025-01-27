@@ -14,13 +14,19 @@ const Form = ({ data, setData, optionsChanged, setOptionsChanged, ...props }) =>
   }
   
   const [ fromElemVal, setFromElemVal ] = useState(data);
+  
   const handleChange = (e) => {
-    setFromElemVal((prevValues) => ({
-      ...prevValues,
-      [e.target.name]: (e.target.type === "checkbox" ? e.target.checked: e.target.value),
-    }));
+    setFromElemVal((prevValues) => {
+      const newValues = {
+        ...prevValues,
+        [e.target.name]: (e.target.type === "checkbox" ? e.target.checked: e.target.value),
+      }
+      return newValues
+    });
     checkIsUpdated()
   };
+
+  console.log(fromElemVal["banwords"]);
   
   const [ form, serializeForm ] = useForm({ data, setFromElemVal });
   
@@ -38,11 +44,15 @@ const Form = ({ data, setData, optionsChanged, setOptionsChanged, ...props }) =>
           </li>
           <li>
             <h4 className="label">Меню Select</h4>
-            <select name="Menu_select" id="" value={fromElemVal.Menu_select} onChange={handleChange}>
+            <select name="Menu_select" value={fromElemVal.Menu_select} onChange={handleChange}>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
             </select>
+          </li>
+          <li>
+            <h4 className="label">Список банвордов</h4>
+            <input type="text" value={fromElemVal.banwords} onInput={handleChange} name="banwords"/>
           </li>
         </ul>
         <Button onClick={async (e) => {

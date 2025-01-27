@@ -4,7 +4,7 @@ const useBurgerAnimation = () => {
   const menu_burger = useRef();
 
   function burgerAnimation() {
-    const header_menu = document.querySelector(".header__menu")
+    const aside = document.querySelector(".sidebar")
     const body = document.querySelector("body")
     //Вспомогательная переменная
     let init = true
@@ -15,7 +15,7 @@ const useBurgerAnimation = () => {
 
     function toggleClasses() {
       menu_burger.current.classList.toggle("_active")
-      // header_menu.classList.toggle("_active")
+      aside.classList.toggle("_active")
       if (body.classList.contains("_unlock")) {
         body.classList.remove("_unlock")
         body.classList.add("_lock") 

@@ -4,7 +4,7 @@ const useApi = () => {
   const guildID = window.location.pathname.split("/").pop()
 
   const subscribe = async ( signal ) => {
-    const response = await axios.get(`http://192.168.0.191:8000/api/getNotification/${guildID}`,
+    const response = await axios.get(`http://localhost:8000/api/getNotification/${guildID}`,
     {
       signal,
       headers: {
@@ -15,7 +15,7 @@ const useApi = () => {
   };
 
   const sendOptions = async ( data, signal ) => {
-    const response = await axios.patch(`http://192.168.0.191:8000/api/updateConfig/${guildID}`, JSON.stringify(data),
+    const response = await axios.patch(`http://localhost:8000/api/updateConfig/${guildID}`, JSON.stringify(data),
     {
       signal,
       headers: {

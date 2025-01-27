@@ -19,6 +19,7 @@ const ServerOptions = () => {
     testFunc: false,
     secondSwitch: false,
     Menu_select: "1",
+    banwords: [],
   })
 
   const { dataLoader, userGuilds, setUserGuilds } = useAuthContext()

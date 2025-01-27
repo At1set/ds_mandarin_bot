@@ -15,7 +15,9 @@ const useForm = ({ data, setFromElemVal }) => {
       .filter((item) => !!item.name)
       .forEach((element) => {
         const { name, type } = element;
-        const value = type === "checkbox" ? element.checked : element.value;
+        let value = element.value;
+        if (type === "checkbox") value = element.checked
+        else if (element.name === "banwords") value = element.value.trim().split(" ")
 
         data[name] = value;
       });
