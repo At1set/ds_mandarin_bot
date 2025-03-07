@@ -68,18 +68,18 @@ $header-hight: 70;
 @import "../components/Layout/Layout.scss";
 @import "../components/Sidebar/Sidebar.scss";
 @import "../components/MenuBurger/MenuBurger.scss";
-
+@import "../components/UI/DropDownMenu/DropDownMenu.scss";
 //</React Elements>=========================================================================================================================================================
 
 //<СТРАНИЦЫ САЙТА>=========================================================================================================================================================
 
 //<Pages>========================
-@import "../pages/Auth/Auth.scss";
 @import "../pages/ErrorPage/ErrorPage.scss";
 @import "../pages/Main/Main.scss";
 @import "../pages/ServerOptions/ServerOptions.scss";
 @import "../pages/Loading/Loading.scss";
 @import "../pages/UserGuilds/UserGuilds.scss";
+@import "../pages/Login/Login.scss";
 //</Pages>=======================
 
 //</СТРАНИЦЫ САЙТА>========================================================================================================================================================

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 
 import Button from "../UI/Button/Button.jsx"
 import Loading_circle from "../Loading_circle/Loading_circle.jsx"
@@ -11,10 +10,9 @@ import { useAuthContext } from "../../context/Auth.jsx";
 import icon_arrow from "../../images/icon-arrow.svg"
 import MenuBurger from "../MenuBurger/MenuBurger.jsx";
 
-const Header = ({...props}) => {
+const Header = ({withBurger=false, ...props}) => {
   const navigate = useNavigate();
 
-  const { login } = useAuth();
   const { isAuth, setIsAuth, user } = useAuthContext();
 
   const myServers = (e) => {
@@ -26,6 +24,7 @@ const Header = ({...props}) => {
   const logout = () => {
     localStorage.clear()
     setIsAuth(false)
+    
     return navigate("/")
   }
 
@@ -46,15 +45,15 @@ const Header = ({...props}) => {
           <div className="bot-logo__txt"><h3>Mandarin bot</h3></div>
         </div>
 
-        <MenuBurger/>
+        {withBurger && <MenuBurger/>}
 
         <div className="header__user header-user">
           
           {!isAuth && // Кнопка входа в аккаунт discord
-          <LoginButton 
+          <LoginButton
             onClick={(e) => {
               e.target.disabled = true
-              return login()
+              return window.location.href = "http://localhost:8000/auth/discord"
             }}
           />}
 

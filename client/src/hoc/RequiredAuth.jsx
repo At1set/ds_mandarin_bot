@@ -7,7 +7,7 @@ const RequiredAuth = ({children}) => {
   const { isAuth } = useAuthContext();
 
   if (!isAuth) {
-    return <Navigate to="/" state={{redirectedFrom: location}}/>
+    return <Navigate to={`/login?redirect=${location.pathname + location.search}`}/>
   }
 
   return children;

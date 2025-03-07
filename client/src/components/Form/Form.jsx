@@ -7,7 +7,9 @@ import Switch from "../UI/Switch/Switch";
 import { compareObjects } from "../../utils/functions";
 import useForm from "../../hooks/useForm";
 
-const Form = ({ data, setData, optionsChanged, setOptionsChanged, ...props }) => {
+const Form = ({ data, setData, children, ...props }) => {
+  const [optionsChanged, setOptionsChanged] = useState(false)
+
   const checkIsUpdated = () => {
     let formData = serializeForm(form.current)
     return setOptionsChanged(!compareObjects(formData, data))
@@ -25,8 +27,6 @@ const Form = ({ data, setData, optionsChanged, setOptionsChanged, ...props }) =>
     });
     checkIsUpdated()
   };
-
-  console.log(fromElemVal["banwords"]);
   
   const [ form, serializeForm ] = useForm({ data, setFromElemVal });
   
@@ -34,30 +34,8 @@ const Form = ({ data, setData, optionsChanged, setOptionsChanged, ...props }) =>
     <>
       <form ref={form} {...props}>
         <ul>
-          <li>
-            <h4 className="label">Включает боту тестовую функцию</h4>
-            <Switch checked={fromElemVal.testFunc} onChange={handleChange} name="testFunc"/>
-          </li>
-          <li>
-            <h4 className="label">Еще 1 свитч</h4>
-            <Switch checked={fromElemVal.secondSwitch} onChange={handleChange} name="secondSwitch"/>
-          </li>
-          <li>
-            <h4 className="label">Меню Select</h4>
-            <select name="Menu_select" value={fromElemVal.Menu_select} onChange={handleChange}>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-          </li>
-          <li>
-            <h4 className="label">Список банвордов</h4>
-            <input type="text" value={fromElemVal.banwords} onInput={handleChange} name="banwords"/>
-          </li>
+          { children }
         </ul>
-        <Button onClick={async (e) => {
-          e.preventDefault()
-        }}>Submit</Button>
       </form>
       <ChangingDetected
         isActive={optionsChanged}

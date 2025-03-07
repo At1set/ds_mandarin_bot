@@ -12,8 +12,8 @@ import useApi from "../../hooks/useApi";
 export const UserGuildsRoute = () => {
   return (
     <Routes>
-      <Route index              element={<UserGuilds />}/>
-      <Route path=":guildID"    element={<RequiredAuth children={<ServerOptions />}/>}/>
+      <Route index element={<UserGuilds />}/>
+      <Route path=":guildID/options" element={<RequiredAuth children={<ServerOptions />}/>}/>
     </Routes>
   )
 }

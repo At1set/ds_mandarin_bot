@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react"
+
 import Form from "../../components/Form/Form"
+import TestFunc from "./FormOptions/TestFunc/TestFunc"
+import SecondSwitch from "./FormOptions/SecondSwitch/SecondSwitch"
+import Menu_select from "./FormOptions/Menu_select/Menu_select"
+import Banwords from "./FormOptions/Banwords/Banwords"
+import DropDownMenu, { MenuOption } from "../../components/UI/DropDownMenu/DropDownMenu"
 
 import useApi from "../../hooks/useApi"
 import { useAuthContext } from "../../context/Auth"
@@ -14,18 +20,19 @@ const ServerOptions = () => {
   const params = useParams();
   const location = useLocation();
 
-  const [optionsChanged, setOptionsChanged] = useState(false)
-  const [data, setData] = useState({
+  const defaultOptions = {
     testFunc: false,
     secondSwitch: false,
     Menu_select: "1",
     banwords: [],
-  })
+  }
+  const [ data, setData ] = useState(defaultOptions)
+  const [ oldData, setOldData ] = useState(defaultOptions)
 
   const { dataLoader, userGuilds, setUserGuilds } = useAuthContext()
 
   const { getOptions } = useApi()
-  const [state, setState] = useState(States.LOADING)
+  const [ state, setState ] = useState( States.LOADING )
   const { startLoading } = useLoading({ state, setState })
 
   function getGuildOptions(guildID) {
@@ -35,8 +42,12 @@ const ServerOptions = () => {
     ).then((res) => {
       console.log(res)
       dataLoader.setLoadingState("UserOptions", false)
-      if (!res.error) return setData(res.data.message)
-      if (
+      if (!res.error) {
+        setData(res.data.message)
+        setOldData(res.data.message)
+        return
+      }
+      else if (
         res.error instanceof axios.AxiosError &&
         res.error?.response.data.status ===
           "Options don't exists error"
@@ -62,6 +73,8 @@ const ServerOptions = () => {
     getGuildOptions(guildID)
   }, [userGuilds])
 
+  const [ open, setOpen ] = useState(false);
+  
   return (
     <section className="ServerOptions page_root">
       <div className="ServerOptions__container">
@@ -75,9 +88,29 @@ const ServerOptions = () => {
             className="ServerOptions__form form"
             data={data}
             setData={setData}
-            optionsChanged={optionsChanged}
-            setOptionsChanged={setOptionsChanged}
-          />
+          >
+            <TestFunc value={data.testFunc} setValue={setData} />
+            <SecondSwitch value={data.secondSwitch} setValue={setData} />
+            <Menu_select value={data.Menu_select} setValue={setData} />
+            <Banwords value={data.banwords} setValue={setData} />
+            <DropDownMenu
+              value={data.Menu_select}
+              setValue={
+                (newValue) => setData(oldValue => {
+                  return {
+                    ...oldValue,
+                    "Menu_select": newValue
+                  }
+                })
+              }
+              open={open}
+              setOpen={setOpen}
+            >
+              <MenuOption value={"1"}>1</MenuOption>
+              <MenuOption value={"2"}>2</MenuOption>
+              <MenuOption value={"3"}>Тутутуту</MenuOption>
+            </DropDownMenu>
+          </Form>
         )}
       </div>
     </section>

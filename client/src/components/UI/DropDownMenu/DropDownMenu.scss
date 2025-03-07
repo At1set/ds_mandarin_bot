@@ -1,0 +1,93 @@
+.dropDownMenu {
+  position: relative;
+  width: 200px;
+}
+
+.dropDownMenu__face {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: $darker;
+  cursor: pointer;
+  position: relative;
+  z-index: 5;
+
+  &::after {
+    visibility: hidden;
+    content: '';
+    display: block;
+    position: absolute;
+    width: 95%;
+    height: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    background-color: #5a5a5a;
+  }
+
+  .dropDownMenu._active &::after {
+    visibility: visible;
+  }
+
+  .dropDownMenu__arrow {
+    position: relative;
+    margin-left: auto;
+    width: 20px;
+    height: 12px;
+    transition: transform .3s ease 0s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &::before {
+      content: '';
+      display: block;
+      height: 12px;
+      width: 12px;
+      border: 2px solid rgb(166, 166, 166);
+      border-right: none;
+      border-top: none;
+      transform: rotate(-45deg) translate(25%, -25%);
+      position: absolute;
+    }
+
+    .dropDownMenu._active & {
+      transform: rotateX(-180deg) translateY(10%);
+    }
+  }
+
+  input {
+    display: block;
+    width: 120px;
+    margin-right: 5px;
+    margin-left: auto;
+  }
+}
+
+.dropDownMenu__options {
+  position: absolute;
+  width: 100%;
+  background: $darker;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+  transition: .3s ease 0s;
+  transition-property: opacity, transform;
+
+  .dropDownMenu._active & {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0px);
+  }
+}
+
+.dropDownMenu__option {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color .2s ease 0s;
+}
+
+.dropDownMenu__option:hover {
+  background: $dark;
+}

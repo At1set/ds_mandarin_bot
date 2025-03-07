@@ -1,12 +1,14 @@
 form {
-  margin-top: 40px;
   border: 1px solid black;
 }
 
 form li {
   display: flex;
-  justify-content: center;
   align-items: center;
+}
+
+form li:not(:last-child) {
+  margin-bottom: 10px;
 }
 
 li h4 {

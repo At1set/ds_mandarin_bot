@@ -51,11 +51,10 @@ const useApi = () => {
   }
 
   // Получение токена доступа discord
-  const getAccessTocken =  async ({ code, code_verifier, redirect_uri, ...data }, signal) => {
-    const response = await axios.post("http://localhost:8000/auth/tocken/", JSON.stringify({
+  const getAccessTocken =  async ({ code, state, ...data }, signal) => {
+    const response = await axios.post("http://localhost:8000/auth/token/", JSON.stringify({
       code,
-      code_verifier,
-      redirect_uri,
+      state,
       ...data,
     }), {
       signal,

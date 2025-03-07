@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import "./styles/App.scss";
 
-import AppRouter from "./components/AppRouter";
+import AppRouter from "./routers/AppRouter.jsx";
 import { AuthContext } from "./context/Auth";
 import DataLoader from "./utils/DataLoader";
+import TokenService from "./services/Token.js";
 
 function App() {
-
-  const [ isAuth, setIsAuth ] = useState(false);
+  const [ isAuth, setAuth ] = useState(null);
   const [ user, setUser ] = useState(null);
   const [ userGuilds, setUserGuilds ] = useState(null);
 
@@ -16,15 +16,25 @@ function App() {
   const dataLoader = useMemo(() => new DataLoader(setDataLoading), [setDataLoading])
 
   useEffect(() => {
-    if (localStorage.getItem("access_token")) {
-      setIsAuth(true)
+    const checkAuth = async () => {
+      try {
+        dataLoader.setLoadingState("sync token", true)
+        const { user } = await TokenService.synchronize()
+        setUser(user)
+        return setAuth(true)
+      } catch (error) {
+        return setAuth(false)
+      } finally {
+        dataLoader.setLoadingState("sync token", false)
+      }
     }
+    checkAuth()
   }, [])
 
   return (
     <AuthContext.Provider value={{
       isAuth,
-      setIsAuth,
+      setAuth,
 
       user,
       setUser,

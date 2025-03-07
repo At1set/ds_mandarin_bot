@@ -12,13 +12,7 @@ const Main = () => {
   const [ notification, setNotification ] = useState({show: false, message: "", isError: false})
   const { showNotification } = useNotification({ notification, setNotification });
 
-  const { isAuth } = useAuthContext()
-
   useEffect(() => {
-    if (location.state?.redirectedFrom && isAuth) { // For RequiredAuth hoc only when reloading page
-      const redirectedUrl = location.state.redirectedFrom
-      return navigate(redirectedUrl.pathname, {replace: true, state: redirectedUrl.state})
-    }
     if (location.state?.state) showNotification(location.state.state)
     return window.history.replaceState({}, '')
   }, [])

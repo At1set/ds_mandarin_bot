@@ -20,7 +20,7 @@ const UserGuild = ({guildId, name, icon, isBot, userGuilds, owner="Owner", ...pr
         </div>
         <div className="guild-bottom__isOwner">{owner}</div>
         {isBot 
-        ? <Link to={`${guildId}`} state={{userGuilds}} className="guild-bottom__btn">Go</Link>
+        ? <Link to={`${guildId}/options`} state={{userGuilds}} className="guild-bottom__btn">Go</Link>
         : <Button className="guild-bottom__btn guild-bottom__btn_setup" onClick={(e) => {
           const setup_url = `https://discord.com/oauth2/authorize?client_id=1251533444945805466&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fguild-install&integration_type=0&scope=bot+applications.commands&permissions=8&guild_id=${guildId}`
           return window.location.href = setup_url
