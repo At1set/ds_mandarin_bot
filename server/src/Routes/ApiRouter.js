@@ -1,11 +1,13 @@
 import { Router } from "express";
-import ApiHandler from "../components/ApiHandler.js"
+import apiHandler from "../services/ApiHandler.js"
+import requiredAuth from "../middlewares/requiredAuth.js";
 
 const router = new Router()
+router.use(requiredAuth)
 
-router.get("/getUserGuilds/", ApiHandler.getUserGuilds.bind(ApiHandler))
-router.get("/getOptions/", ApiHandler.getOptions.bind(ApiHandler))
-router.get("/getNotification/:guildID", ApiHandler.subscribe.bind(ApiHandler))
-router.patch("/updateConfig/:guildID", ApiHandler.updateOptions.bind(ApiHandler))
+router.get("/getUserGuilds/", apiHandler.getUserGuilds)
+router.get("/getOptions/:guildID", apiHandler.getOptions)
+router.get("/getNotification/:guildID", apiHandler.subscribe)
+router.patch("/updateOptions/:guildID", apiHandler.updateOptions)
 
 export default router

@@ -11,10 +11,13 @@
   "description": "",
   "dependencies": {
     "axios": "^1.7.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
     "pkce-challenge": "^4.1.0",
     "undici": "^6.19.2",
     "uuid": "^10.0.0",

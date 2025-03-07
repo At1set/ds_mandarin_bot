@@ -1,11 +1,12 @@
 import { Router } from "express"
-import AuthHandler from "../components/AuthHandler.js"
+import AuthHandler from "../services/AuthHandler.js"
+import tokenMiddleware from "../middlewares/token.js" 
 
 const router = new Router()
 
-router.get("/authorize", AuthHandler.authorize.bind(AuthHandler))
-router.post("/tocken", AuthHandler.tocken.bind(AuthHandler))
-router.get("/killSession", AuthHandler.killSession.bind(AuthHandler))
-router.get("/logout", AuthHandler.logout.bind(AuthHandler))
+router.get("/discord", AuthHandler.discord)
+router.post("/token", tokenMiddleware, AuthHandler.token)
+router.get("/refresh", AuthHandler.refresh)
+router.get("/logout", AuthHandler.logout)
 
 export default router

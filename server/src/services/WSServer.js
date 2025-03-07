@@ -1,19 +1,28 @@
 import { WebSocketServer } from "ws"
+import ApiError from "../exceptions/ApiError.js"
 
 export default class WSServer {
+  Bot
+  server
+  port
   static Instance = null
 
-  constructor(server, port) {
+  constructor() {
     if (WSServer.Instance) return WSServer.Instance
-    this.port = port
-    this.wss = new WebSocketServer({ server })
-    this.inited = false
     this.Bot = null
     WSServer.Instance = this
   }
 
+  start({ server, port, ...options }) {
+    this.server = server
+    this.port = port
+    this.wss = new WebSocketServer({ server, ...options })
+    this.wss.on("connection", this.onConnection.bind(this))
+    console.log(`Websocket server стартовал на порту ${this.port}!\nОжидание подключения бота...`)
+  }
+
   onClose() {
-    console.log("Бот отключился!")
+    console.log("Бот отключился от сервера!")
     return this.Bot = null
   }
 
@@ -25,17 +34,9 @@ export default class WSServer {
     ws.on("close", this.onClose.bind(this))
   }
 
-  start() {
-    if (this.inited) return
-    this.inited = true
-
-    this.wss.on("connection", this.onConnection.bind(this))
-    console.log(`Websocket server стартовал на порту ${this.port}!\nОжидание подключения бота...\n`)
-  }
-
   async sendToBot(messageId, action, data={}) {
-    if (!this.Bot) return { status: "InternalError", message: "Server isn't connected to a Bot!" }
-
+    if (!this.Bot) throw ApiError.NoBotConnection()
+    
     let res = await new Promise((resolve, reject) => {
       const message = { id: messageId, action, data }
 
@@ -50,12 +51,12 @@ export default class WSServer {
         }
       }
       this.Bot.on("message", messageHandler)
-
+      
       const timeout = setTimeout(() => {
         this.Bot.off("message", messageHandler)
         reject(new Error("Bot did not respond in time!"))
       }, 8000) // 5 seconds timeout
-    }).catch(err => new Object({ status: "InternalError", message: err.message }))
+    }).catch(err => {throw err})
 
     return res
   }
