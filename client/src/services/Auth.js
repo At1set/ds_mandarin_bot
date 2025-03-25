@@ -21,7 +21,7 @@ class AuthService {
     return response.data
   }
 
-  static async refresh() {
+  static async refreshToken() {
     const response = await Token.update()
     return response.data
   }

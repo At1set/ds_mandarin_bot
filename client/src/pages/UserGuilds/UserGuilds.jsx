@@ -8,6 +8,7 @@ import UserGuild from "../../components/UserGuild/UserGuild";
 import RequiredAuth from "../../hoc/RequiredAuth";
 import ServerOptions from "../ServerOptions/ServerOptions";
 import useApi from "../../hooks/useApi";
+import ApiService from "../../services/Api";
 
 export const UserGuildsRoute = () => {
   return (
@@ -21,20 +22,22 @@ export const UserGuildsRoute = () => {
 const UserGuilds = () => {
   const States = State.getStates();
 
-  const { dataLoader, userGuilds, setUserGuilds } = useAuthContext();
-  const { getUserGuilds } = useApi()
+  const { dataLoader, setAuth, user, setUser } = useAuthContext();
   const [ state, setState ] = useState(States.LOADING);
   const { startLoading } = useLoading({ setState });
 
   useEffect(() => {
     dataLoader.setLoadingState("UserGuilds", true)
-    startLoading(getUserGuilds).then(res => {
+    const loadFunc = () => ApiService.getUserGuilds(setAuth)
+    startLoading(loadFunc).then(res => {
       console.log(res);
       dataLoader.setLoadingState("UserGuilds", false)
-      if (!res.error) return setUserGuilds(res.data)
-      return setUserGuilds(res)
+      if (!res.error) return setUser((user) => ({
+        ...user,
+        guilds: res.data
+      }))
     })
-  }, [])  
+  }, [])
 
   return (
     <section className="UserGuilds page_root">
@@ -42,9 +45,9 @@ const UserGuilds = () => {
         <h3>Выберите сервер</h3>
       </div>
       <div className="UserGuilds__container">
-        {state === States.ERROR && <div className="errorBox">{`${userGuilds.error.request?.response || userGuilds.error || "Произошла непридвиденная ошибка!"}`}</div>}
+        {state === States.ERROR && <div className="errorBox">Не удалось получить ответ от сервера. Возможно, сервер отключен, или у вас отсутсвует подключение к сети.</div>}
         {state === States.SUCCESS &&
-          userGuilds?.map(guild => {
+          user.guilds?.map(guild => {
             return <UserGuild guildId={guild.id} name={guild.name} icon={guild.icon} isBot={guild.isBot} userGuilds={userGuilds} key={guild.id}/>
           })
         }
